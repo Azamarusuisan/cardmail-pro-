@@ -2,13 +2,13 @@ import * as React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Settings } from 'lucide-react'
 import { Button } from '../components/ui/button'
-import { cn } from '../lib/utils'
 import ReviewSidebar from '../components/ReviewSidebar'
 import EditForm from '../components/EditForm'
 import EmailPreview from '../components/EmailPreview'
 import SendButton from '../components/SendButton'
-import { usePendingCards, useSelectedCard, useCardStore, useAutoSendEnabled } from '../hooks/useCardStore'
+import { usePendingCards, useSelectedCard, useCardStore } from '../hooks/useCardStore'
 import { useNavigate } from 'react-router-dom'
+import { useSettings } from '../context/SettingsContext'
 import { useToast } from '../hooks/use-toast'
 
 export default function Review() {
@@ -16,8 +16,8 @@ export default function Review() {
   const { toast } = useToast()
   const pendingCards = usePendingCards()
   const selectedCard = useSelectedCard()
-  const autoSendEnabled = useAutoSendEnabled()
-  const { selectCard, updateCard } = useCardStore()
+  const { settings: { autoSend: autoSendEnabled } } = useSettings()
+  const { setSelectedCard: selectCard, updateCard } = useCardStore()
   
   const [isGenerating, setIsGenerating] = React.useState(false)
   const [isSending, setIsSending] = React.useState(false)
@@ -63,7 +63,7 @@ export default function Review() {
   }
   
   const handleSendEmail = async () => {
-    if (!selectedCard || !selectedCard.emailContent) return
+    if (!selectedCard || !selectedCard.emailContent || !selectedCard.extractedData) return
     
     setIsSending(true)
     updateCard(selectedCard.id, { status: 'sending' })
@@ -87,7 +87,6 @@ export default function Review() {
         throw new Error(`送信エラー: ${response.status}`)
       }
       
-      const result = await response.json()
       
       // 成功時の処理はSendButtonコンポーネントで実行
       
@@ -98,15 +97,6 @@ export default function Review() {
     }
   }
   
-  const handleCardSelect = (cardId: string | null) => {
-    if (cardId) {
-      selectCard(cardId)
-      const card = pendingCards.find(c => c.id === cardId)
-      if (card && card.status === 'pending') {
-        updateCard(cardId, { status: 'reviewing' })
-      }
-    }
-  }
   
   const handleBackToDashboard = () => {
     navigate('/')

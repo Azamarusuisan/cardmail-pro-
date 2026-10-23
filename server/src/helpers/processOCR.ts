@@ -1,5 +1,5 @@
 import { readFile } from 'fs/promises';
-import { vision } from '@google-cloud/vision';
+import * as vision from '@google-cloud/vision';
 import OpenAI from 'openai';
 import { z } from 'zod';
 

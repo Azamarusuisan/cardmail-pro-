@@ -140,7 +140,7 @@ function extractBusinessCardInfo(text: string): OCRResult {
 
 // Handle messages from main thread
 self.onmessage = async (event) => {
-  const { id, imageData, fileName } = event.data;
+  const { id, imageData } = event.data;
 
   try {
     // Initialize worker if needed

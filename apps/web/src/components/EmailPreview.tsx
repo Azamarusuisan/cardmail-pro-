@@ -4,8 +4,8 @@ import { RotateCcw, Send, Copy, Mail } from 'lucide-react'
 import { Button } from './ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { cn } from '../lib/utils'
-import { EmailContent, generateMail, generateMailStream } from '../helpers/generateMail'
-import { useCardStore } from '../hooks/useCardStore'
+import { EmailContent, generateMailStream } from '../helpers/generateMail'
+import { useCardStore, useSelectedCard } from '../hooks/useCardStore'
 import { useToast } from '../hooks/use-toast'
 
 interface EmailPreviewProps {
@@ -25,7 +25,8 @@ export default function EmailPreview({
   const [isGenerating, setIsGenerating] = React.useState(false)
   const [streamingContent, setStreamingContent] = React.useState('')
   
-  const { selectedCard, updateEmailContent } = useCardStore()
+  const selectedCard = useSelectedCard()
+  const { updateCard } = useCardStore()
   const { toast } = useToast()
   
   const card = selectedCard && selectedCard.id === cardId ? selectedCard : null
@@ -57,7 +58,7 @@ export default function EmailPreview({
       
       if (finalContent) {
         setEmailContent(finalContent)
-        updateEmailContent(card.id, finalContent)
+        updateCard(card.id, { emailContent: finalContent })
         setStreamingContent('')
       }
     } catch (error) {
@@ -70,7 +71,7 @@ export default function EmailPreview({
     } finally {
       setIsGenerating(false)
     }
-  }, [card, updateEmailContent, toast])
+  }, [card, updateCard, toast])
   
   const regenerateEmail = async () => {
     setEmailContent(null)
@@ -282,7 +283,7 @@ export default function EmailPreview({
               
               {/* 宛先情報 */}
               <div className="pt-2 text-xs text-muted-foreground text-center">
-                送信先: {card.extractedData.email}
+                送信先: {card.extractedData?.email}
               </div>
             </motion.div>
           )}

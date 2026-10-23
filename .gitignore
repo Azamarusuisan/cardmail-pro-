@@ -104,9 +104,6 @@ temp/
 ehthumbs.db
 Thumbs.db
 
-# Docker
-.dockerignore
-
 # Playwright
 test-results/
 playwright-report/
@@ -137,6 +134,5 @@ tests/fixtures/*
 *.backup
 *.bak
 
-# Lock files (keep pnpm-lock.yaml)
-package-lock.json
+# Other package managers
 yarn.lock

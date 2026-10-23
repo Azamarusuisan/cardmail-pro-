@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
 import { z } from 'zod';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID as uuidv4 } from 'node:crypto';
 import { authenticateToken, AuthRequest } from '../middleware/auth.js';
 import { addToQueue } from '../helpers/queue.js';
 import { AppError } from '../middleware/errorHandler.js';

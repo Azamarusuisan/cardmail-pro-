@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, CheckCircle, AlertTriangle, RotateCcw } from 'lucide-react'
+import { Send, CheckCircle, AlertTriangle } from 'lucide-react'
 import { Button } from './ui/button'
 import { Badge } from './ui/badge'
 import { cn } from '../lib/utils'
-import { useCardStore } from '../hooks/useCardStore'
+import { useCardStore, useSelectedCard } from '../hooks/useCardStore'
 import { useToast } from '../hooks/use-toast'
 
 interface SendButtonProps {
@@ -26,11 +26,12 @@ export default function SendButton({
   const [retryCount, setRetryCount] = React.useState(0)
   const [lastError, setLastError] = React.useState<string | null>(null)
   
-  const { selectedCard, moveCardToSent, markCardAsFailed } = useCardStore()
+  const selectedCard = useSelectedCard()
+  const { sendCard: moveCardToSent, updateCard } = useCardStore()
   const { toast } = useToast()
   
   const card = selectedCard && selectedCard.id === cardId ? selectedCard : null
-  const hasEmailContent = card?.emailContent && card.extractedData.email
+  const hasEmailContent = card?.emailContent && card.extractedData?.email
   
   const handleSend = async () => {
     if (!card || !hasEmailContent || sendState === 'sending') return
@@ -47,7 +48,7 @@ export default function SendButton({
       
       toast({
         title: '送信完了',
-        description: `${card.extractedData.name}さんへのメールを送信しました。`
+        description: `${card.extractedData?.name}さんへのメールを送信しました。`
       })
       
       // 2秒後に状態をリセット
@@ -64,7 +65,7 @@ export default function SendButton({
       setRetryCount(prev => prev + 1)
       
       // カードを失敗状態にマーク
-      markCardAsFailed(card.id, errorMessage)
+      updateCard(card.id, { status: 'failed', error: errorMessage })
       
       toast({
         title: '送信エラー',
@@ -228,11 +229,11 @@ export default function SendButton({
       {card && (
         <div className="text-center">
           <p className="text-xs text-muted-foreground">
-            送信先: {card.extractedData.email}
+            送信先: {card.extractedData?.email}
           </p>
-          {card.extractedData.name && (
+          {card.extractedData?.name && (
             <p className="text-xs text-muted-foreground">
-              {card.extractedData.name}さん
+              {card.extractedData?.name}さん
             </p>
           )}
         </div>

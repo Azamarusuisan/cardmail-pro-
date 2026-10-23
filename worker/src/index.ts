@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { Worker } from 'bullmq';
-import IORedis from 'ioredis';
+import { Redis as IORedis } from 'ioredis';
 import { processCardHandler } from './processors/ocrAndSend.js';
 
 dotenv.config();

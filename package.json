@@ -1,16 +1,20 @@
 {
-    "name": "cardmail-pro",
-    "version": "1.0.0",
-    "private": true,
-    "type": "module",
-    "scripts": {
-      "build": "cd apps/web && npm install && npm run build",
-      "dev": "cd apps/web && npm run dev",
-      "start": "cd apps/web && npm run preview"
-    },
-    "workspaces": [
-      "apps/web",
-      "server",
-      "worker"
-    ]
+  "name": "cardmail-pro",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm run build --workspace=@cardmail-pro/web",
+    "dev": "npm run dev --workspace=@cardmail-pro/web -- --host 0.0.0.0",
+    "start": "npm run preview --workspace=@cardmail-pro/web -- --host 0.0.0.0",
+    "build:all": "npm run build --workspaces --if-present"
+  },
+  "workspaces": [
+    "apps/web",
+    "server",
+    "worker"
+  ],
+  "engines": {
+    "node": "^22.23.4"
   }
+}

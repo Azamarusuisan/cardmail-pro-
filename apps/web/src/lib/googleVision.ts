@@ -120,7 +120,7 @@ function fileToBase64(file: File): Promise<string> {
 /**
  * Calculate confidence score based on text quality
  */
-function calculateConfidence(text: string, annotations: any[]): number {
+function calculateConfidence(text: string, _annotations: any[]): number {
   if (!text.trim()) {
     return 0;
   }
@@ -160,7 +160,7 @@ function calculateConfidence(text: string, annotations: any[]): number {
  * Fallback OCR using browser's experimental Web APIs
  * This is a placeholder for potential future browser OCR capabilities
  */
-export async function fallbackOCR(imageFile: File): Promise<OCRResult> {
+export async function fallbackOCR(): Promise<OCRResult> {
   // For now, return empty result
   // In the future, this could use Tesseract.js or other client-side OCR
   console.warn('Fallback OCR not implemented');

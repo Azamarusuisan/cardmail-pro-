@@ -1,13 +1,12 @@
 import { useMemo, useState } from 'react'
-import { Trash2, Mail, User, Building2, ChevronUp, ChevronDown } from 'lucide-react'
+import { Trash2, Mail, Building2, ChevronUp, ChevronDown } from 'lucide-react'
 // import { motion, AnimatePresence, Reorder } from 'framer-motion'
 const motion = { div: 'div' as any }
 const AnimatePresence = ({ children }: any) => <>{children}</>
-const Reorder = { Group: 'div' as any, Item: 'div' as any }
 import { Button } from '../ui/button'
 import { Card, CardContent } from '../ui/card'
 import StatusBadge from './StatusBadge'
-import { cn, formatRelativeTime, getInitials } from '../../lib/utils'
+import { formatRelativeTime, getInitials } from '../../lib/utils'
 import { ProcessingJob } from '../../types'
 
 interface ProgressTableProps {

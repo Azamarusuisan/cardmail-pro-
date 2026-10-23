@@ -252,7 +252,7 @@ Create a complete email including subject and body.`;
 }
 
 function generateTemplateEmail(options: GenerateEmailOptions): EmailContent {
-  const { cardData, senderName, tone, language = 'ja' } = options;
+  const { cardData, senderName, tone = 'professional', language = 'ja' } = options;
   
   if (language === 'ja') {
     const templates = {

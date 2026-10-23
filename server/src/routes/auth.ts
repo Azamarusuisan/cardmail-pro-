@@ -53,7 +53,7 @@ router.post('/google/callback', async (req, res, next) => {
       throw new AppError(401, 'Failed to get user info');
     }
 
-    const userInfo = await response.json();
+    const userInfo = z.object({ id: z.string(), email: z.string().email(), name: z.string().optional(), picture: z.string().url().optional() }).parse(await response.json());
 
     // Create JWT
     const jwtPayload = {

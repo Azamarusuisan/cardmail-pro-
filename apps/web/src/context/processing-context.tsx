@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import { ProcessingJob, OCRResult, EmailContent } from '../types';
 import { useOCR } from '../hooks/useOCR';
 import { useMailHistory } from '../hooks/useMailHistory';
@@ -24,7 +24,7 @@ export function ProcessingProvider({ children }: { children: ReactNode }) {
   const [isProcessing, setIsProcessing] = useState(false);
   
   const { performOCR } = useOCR();
-  const { createBatch, updateJobStatus } = useMailHistory();
+  const { createBatch } = useMailHistory();
   const { settings } = useSettings();
   const { enqueueSnackbar } = useSnackbar();
 

@@ -4,7 +4,7 @@ const motion = { div: 'div' as any }
 import { Badge } from '../ui/badge'
 import { cn } from '../../lib/utils'
 
-type JobStatus = 'queued' | 'processing' | 'ocr' | 'generating' | 'sending' | 'sent' | 'failed'
+type JobStatus = 'queued' | 'processing' | 'ocr' | 'generating' | 'generated' | 'sending' | 'sent' | 'failed'
 
 interface StatusBadgeProps {
   status: JobStatus
@@ -39,6 +39,11 @@ const statusConfig: Record<JobStatus, {
     variant: 'warning',
     icon: Loader2,
     animated: true,
+  },
+  generated: {
+    label: 'メール生成済み',
+    variant: 'success',
+    icon: CheckCircle,
   },
   sending: {
     label: '送信中',

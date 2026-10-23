@@ -8,8 +8,7 @@ import { Button } from './ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Badge } from './ui/badge'
 import { cn } from '../lib/utils'
-import { ParsedCardData } from '../helpers/parseCard'
-import { useCardStore } from '../hooks/useCardStore'
+import { useCardStore, useSelectedCard } from '../hooks/useCardStore'
 
 // バリデーションスキーマ
 const cardDataSchema = z.object({
@@ -74,7 +73,8 @@ export default function EditForm({
   isGenerating = false,
   className 
 }: EditFormProps) {
-  const { selectedCard, updateExtractedData } = useCardStore()
+  const selectedCard = useSelectedCard()
+  const { updateCard } = useCardStore()
   
   const card = selectedCard && selectedCard.id === cardId ? selectedCard : null
   
@@ -82,7 +82,6 @@ export default function EditForm({
     register,
     handleSubmit,
     watch,
-    setValue,
     formState: { errors, isDirty, isValid },
     reset
   } = useForm<CardDataForm>({
@@ -116,27 +115,27 @@ export default function EditForm({
   React.useEffect(() => {
     if (isDirty && card) {
       const timer = setTimeout(() => {
-        updateExtractedData(card.id, formData)
+        updateCard(card.id, { extractedData: { confidence: card.extractedData?.confidence ?? 0, ...formData } })
       }, 500) // 500ms後に自動保存
       
       return () => clearTimeout(timer)
     }
-  }, [formData, isDirty, card, updateExtractedData])
+  }, [formData, isDirty, card, updateCard])
   
   const onSubmit = (data: CardDataForm) => {
     if (card) {
-      updateExtractedData(card.id, data)
+      updateCard(card.id, { extractedData: { confidence: card.extractedData?.confidence ?? 0, ...data } })
       onGenerateEmail()
     }
   }
   
-  const confidenceColor = card?.extractedData.confidence 
+  const confidenceColor = card?.extractedData?.confidence
     ? card.extractedData.confidence >= 0.8 ? 'success'
     : card.extractedData.confidence >= 0.6 ? 'warning'
     : 'destructive'
     : 'secondary'
   
-  const confidenceText = card?.extractedData.confidence 
+  const confidenceText = card?.extractedData?.confidence
     ? `${Math.round(card.extractedData.confidence * 100)}%`
     : '不明'
   

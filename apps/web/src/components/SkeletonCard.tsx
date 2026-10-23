@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Card, CardContent } from './ui/card'
+import { Card } from './ui/card'
 import { cn } from '../lib/utils'
 
 interface SkeletonCardProps {

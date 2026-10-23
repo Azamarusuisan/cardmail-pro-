@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { get, set, entries } from 'idb-keyval';
 import { MailHistory, ProcessingJob } from '../types';

@@ -4,9 +4,10 @@ import { ChevronRight, Clock, CheckCircle, AlertCircle, RotateCcw, Trash2 } from
 import { Button } from './ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Badge } from './ui/badge'
-import { cn, formatRelativeTime, truncateText } from '../lib/utils'
+import { cn, formatRelativeTime } from '../lib/utils'
 import { usePendingCards, useSentCards, useSelectedCard, useCardStore } from '../hooks/useCardStore'
-import { BusinessCard, CardStatus } from '../hooks/useCardStore'
+import type { CardData as BusinessCard } from '../hooks/useCardStore'
+type CardStatus = BusinessCard['status']
 
 interface ReviewSidebarProps {
   className?: string
@@ -37,7 +38,7 @@ const CardListItem = ({
   isSelected: boolean
   onClick: () => void 
 }) => {
-  const { removeCard, moveCardToBottom } = useCardStore()
+  const { clearCard: removeCard, moveCardToBottom } = useCardStore()
   
   const handleRemove = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -83,26 +84,26 @@ const CardListItem = ({
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
             <h4 className="text-sm font-medium truncate">
-              {card.extractedData.name || card.fileName}
+              {card.extractedData?.name || card.fileName}
             </h4>
             <StatusIcon status={card.status} />
           </div>
           
-          {card.extractedData.company && (
+          {card.extractedData?.company && (
             <p className="text-xs text-muted-foreground truncate mb-1">
-              {card.extractedData.company}
+              {card.extractedData?.company}
             </p>
           )}
           
-          {card.extractedData.email && (
+          {card.extractedData?.email && (
             <p className="text-xs text-muted-foreground truncate">
-              {truncateText(card.extractedData.email, 25)}
+              {card.extractedData?.email}
             </p>
           )}
           
           <div className="flex items-center justify-between mt-2">
             <span className="text-xs text-muted-foreground">
-              {formatRelativeTime(card.createdAt)}
+              {formatRelativeTime(new Date(card.createdAt))}
             </span>
             
             <Badge 
@@ -156,7 +157,7 @@ const CardListItem = ({
       {card.status === 'failed' && card.error && (
         <div className="mt-2 p-2 bg-destructive/10 border border-destructive/20 rounded">
           <p className="text-xs text-destructive">
-            {truncateText(card.error, 60)}
+            {card.error}
           </p>
         </div>
       )}
@@ -173,7 +174,7 @@ export default function ReviewSidebar({ className }: ReviewSidebarProps) {
   const pendingCards = usePendingCards()
   const sentCards = useSentCards()
   const selectedCard = useSelectedCard()
-  const { selectCard, retryFailedCards, clearSentCards } = useCardStore()
+  const { setSelectedCard: selectCard, retryFailedCards, clearSentCards } = useCardStore()
   
   const [activeTab, setActiveTab] = React.useState<'pending' | 'sent'>('pending')
   

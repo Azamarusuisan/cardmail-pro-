@@ -24,9 +24,10 @@ export interface CardData {
   rawText: string
   extractedData?: ExtractedData
   emailContent?: EmailContent
-  status: 'processing' | 'reviewing' | 'ready' | 'sending' | 'sent' | 'failed'
+  status: 'pending' | 'generating' | 'processing' | 'reviewing' | 'ready' | 'sending' | 'sent' | 'failed'
   createdAt: string
   updatedAt: string
+  error?: string
   sentAt?: string
 }
 
@@ -40,11 +41,14 @@ interface CardStore {
   setSelectedCard: (id: string | null) => void
   clearCard: (id: string) => void
   sendCard: (id: string) => void
+  moveCardToBottom: (id: string) => void
+  retryFailedCards: () => void
+  clearSentCards: () => void
 }
 
 export const useCardStore = create<CardStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       pendingCards: [],
       sentCards: [],
       selectedCardId: null,
@@ -87,6 +91,19 @@ export const useCardStore = create<CardStore>()(
           selectedCardId: state.selectedCardId === id ? null : state.selectedCardId
         }))
       },
+
+      moveCardToBottom: (id) => {
+        set((state) => {
+          const card = state.pendingCards.find(card => card.id === id)
+          return card ? { pendingCards: [...state.pendingCards.filter(card => card.id !== id), card] } : state
+        })
+      },
+
+      retryFailedCards: () => set((state) => ({
+        pendingCards: state.pendingCards.map(card => card.status === 'failed' ? { ...card, status: 'reviewing' as const, error: undefined } : card),
+      })),
+
+      clearSentCards: () => set({ sentCards: [] }),
 
       sendCard: (id) => {
         set((state) => {

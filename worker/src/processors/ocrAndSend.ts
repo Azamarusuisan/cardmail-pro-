@@ -1,7 +1,8 @@
+import { z } from 'zod';
 import { Job } from 'bullmq';
 import Tesseract from 'tesseract.js';
 import sharp from 'sharp';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID as uuidv4 } from 'node:crypto';
 
 // Job data type
 interface ProcessCardJobData {
@@ -206,7 +207,7 @@ async function sendEmailViaAPI(params: {
     throw new Error(`Failed to send email: ${response.statusText}`);
   }
 
-  return response.json();
+  return z.object({ messageId: z.string(), subject: z.string().optional(), body: z.string().optional() }).parse(await response.json());
 }
 
 // Save card data to storage

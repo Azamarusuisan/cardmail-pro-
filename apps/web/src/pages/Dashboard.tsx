@@ -24,7 +24,7 @@ export default function Dashboard() {
     setSettingsOpen(false);
   };
 
-  const handleSelectHistory = (id: string) => {
+  const handleSelectHistory = (id: string | null) => {
     setSelectedHistoryId(id);
   };
 

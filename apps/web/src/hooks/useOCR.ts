@@ -55,7 +55,7 @@ export function useOCR() {
     if (activeJobsRef.current >= settings.maxParallelOCR) return;
 
     setQueue(prev => {
-      const nextJob = prev.find(job => {
+      const nextJob = prev.find(() => {
         // Find a job that hasn't been processed yet
         return true; // Simplified for now
       });

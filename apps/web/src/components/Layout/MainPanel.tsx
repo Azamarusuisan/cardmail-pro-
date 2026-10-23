@@ -26,7 +26,6 @@ interface MainPanelProps {
 }
 
 export default function MainPanel({
-  sidebarOpen,
   onToggleSidebar,
   selectedHistoryId,
   currentView,
@@ -56,7 +55,6 @@ export default function MainPanel({
     setJobs(prev => prev.filter(job => job.id !== jobId));
   };
 
-  const showHistory = selectedHistoryId !== null;
 
   return (
     <Box

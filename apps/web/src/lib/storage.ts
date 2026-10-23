@@ -1,5 +1,5 @@
 import { get, set, del, entries, clear } from 'idb-keyval';
-import { MailHistory, Settings, AuthTokens, ProcessingJob } from '../types';
+import { MailHistory, Settings, AuthTokens } from '../types';
 
 // Storage keys
 const STORAGE_KEYS = {
@@ -17,7 +17,7 @@ export const storage = {
   // Auth
   auth: {
     async getToken(): Promise<string | null> {
-      return await get(STORAGE_KEYS.AUTH_TOKEN);
+      return (await get(STORAGE_KEYS.AUTH_TOKEN)) ?? null;
     },
     
     async setToken(token: string): Promise<void> {
@@ -29,7 +29,7 @@ export const storage = {
     },
     
     async getUser() {
-      return await get(STORAGE_KEYS.AUTH_USER);
+      return (await get(STORAGE_KEYS.AUTH_USER)) ?? null;
     },
     
     async setUser(user: any): Promise<void> {
@@ -44,7 +44,7 @@ export const storage = {
   // Google OAuth tokens
   google: {
     async getTokens(): Promise<AuthTokens | null> {
-      return await get(STORAGE_KEYS.GOOGLE_TOKENS);
+      return (await get(STORAGE_KEYS.GOOGLE_TOKENS)) ?? null;
     },
     
     async setTokens(tokens: AuthTokens): Promise<void> {
@@ -59,7 +59,7 @@ export const storage = {
   // Settings
   settings: {
     async get(): Promise<Settings | null> {
-      return await get(STORAGE_KEYS.SETTINGS);
+      return (await get(STORAGE_KEYS.SETTINGS)) ?? null;
     },
     
     async set(settings: Settings): Promise<void> {
@@ -80,7 +80,7 @@ export const storage = {
     },
     
     async get(id: string): Promise<MailHistory | null> {
-      return await get(`${STORAGE_KEYS.HISTORY_PREFIX}${id}`);
+      return (await get(`${STORAGE_KEYS.HISTORY_PREFIX}${id}`)) ?? null;
     },
     
     async set(history: MailHistory): Promise<void> {

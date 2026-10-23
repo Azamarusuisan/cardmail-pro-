@@ -17,7 +17,7 @@ export interface ProcessingJob {
   id: string;
   fileName: string;
   file: File;
-  status: 'queued' | 'processing' | 'ocr' | 'generating' | 'sending' | 'sent' | 'failed';
+  status: 'queued' | 'processing' | 'ocr' | 'generated' | 'generating' | 'sending' | 'sent' | 'failed';
   progress: number;
   ocrResult?: OCRResult;
   emailContent?: EmailContent;
@@ -87,7 +87,7 @@ export interface BusinessCardData {
     tone: 'professional' | 'friendly' | 'casual';
     language: 'ja' | 'en';
   };
-  status: 'pending' | 'reviewing' | 'generating' | 'ready' | 'sending' | 'sent' | 'failed';
+  status: 'pending' | 'reviewing' | 'generated' | 'generating' | 'ready' | 'sending' | 'sent' | 'failed';
   error?: string;
   createdAt: Date;
   updatedAt: Date;
