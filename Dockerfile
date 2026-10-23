@@ -1,7 +1,7 @@
 # Multi-stage build for CardMail Pro
 
 # Base stage with Node.js and pnpm
-FROM node:18-alpine AS base
+FROM node:22.23.4-alpine AS base
 RUN corepack enable pnpm
 WORKDIR /app
 
@@ -21,7 +21,7 @@ COPY . .
 RUN pnpm build
 
 # Server stage
-FROM node:18-alpine AS server
+FROM node:22.23.4-alpine AS server
 RUN corepack enable pnpm
 WORKDIR /app
 
@@ -38,7 +38,7 @@ EXPOSE 4000
 CMD ["node", "server/dist/index.js"]
 
 # Worker stage  
-FROM node:18-alpine AS worker
+FROM node:22.23.4-alpine AS worker
 RUN corepack enable pnpm
 WORKDIR /app
 
@@ -60,7 +60,7 @@ RUN cd worker && pnpm install --prod --frozen-lockfile
 CMD ["node", "worker/dist/index.js"]
 
 # Web stage
-FROM node:18-alpine AS web
+FROM node:22.23.4-alpine AS web
 RUN corepack enable pnpm
 WORKDIR /app
 
